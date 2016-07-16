@@ -1,5 +1,7 @@
 <?php
 
+namespace SwiftmailerWrapper;
+
 class Utils {
   public static function mail_attachment($files, $mailto, $from_mail, $from_name, $replyto, $subject, $message, $config) {
     if(!class_exists("\Swift_Message")) throw new Exception("Email support not installed on server. Aborting");
