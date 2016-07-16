@@ -14,7 +14,7 @@ class Utils {
         ->setFrom(array($from_mail=>$from_name))
         ->setReplyTo($replyto)
         ->setTo($mailto)
-        ->setBody($message)
+        ->setBody($message,'text/html')
     ;
     foreach($files as $fi) {
       # TODO support change filename http://swiftmailer.org/docs/messages.html#setting-the-filename
