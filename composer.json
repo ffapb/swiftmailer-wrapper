@@ -1,0 +1,32 @@
+{
+    "name":"shadiakiki1986/swiftmailer-wrapper",
+    "description":"wrapper function for swiftmailer",
+    "keywords":["swiftmailer"],
+    "type":"library",
+    "license":"CC0 1.0 Universal",
+    "homepage": "https://github.com/shadiakiki1986/swiftmailer-wrapper",
+    "authors":[
+        {
+            "name":"Shadi Akiki",
+            "email":"s.akiki@ffaprivatebank.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require":{
+        "php":">=5.3.5",
+        "swiftmailer/swiftmailer": "*"
+    },
+    "require-dev": {
+        "jakub-onderka/php-parallel-lint": "^0.9"
+    },
+    "autoload": {
+        "psr-4" : {
+           "SwiftmailerWrapper\\" : "src"
+         }
+    },
+    "scripts": {
+        "test": [
+            "parallel-lint . --exclude vendor"
+        ]
+    }
+}
