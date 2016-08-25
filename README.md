@@ -24,7 +24,7 @@ require_once __DIR__.'/vendor/autoload.php';
 );
 ```
 
-Todo: support file rename in attachment: i.e. files parameter to be
+Files can be renamed in attachment by passing files parameter as follows:
 ```php
   array("newName1"=>"/path/to/file1","newName2"=>"/path/to/file2"),
 ```
