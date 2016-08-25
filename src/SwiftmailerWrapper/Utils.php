@@ -17,9 +17,10 @@ class Utils {
         ->setBody($message,'text/html')
     ;
     foreach($files as $k=>$fi) {
-      $attachment = $message->attach(\Swift_Attachment::fromPath($fi));
+      $attachment = \Swift_Attachment::fromPath($fi);
       # change filename http://swiftmailer.org/docs/messages.html#setting-the-filename
       if(is_string($k)) $attachment->setFilename($k);
+      $message->attach($attachment);
     }
 
     # References
