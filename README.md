@@ -6,10 +6,10 @@ Install: `composer require shadiakiki1986/swiftmailer-wrapper:dev-master`
 
 Use:
 ```php
-require_once '/path/to/vendor/.../autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 \SwiftmailerWrapper\Utils::mail_attachment(
   array("/path/to/file1","/path/to/file2"),
-  "email@somewhere.com",
+  "to@email.com",
   "from@email.com",
   "From Name",
   "reply@email.com",

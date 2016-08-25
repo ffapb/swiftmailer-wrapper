@@ -16,9 +16,10 @@ class Utils {
         ->setTo($mailto)
         ->setBody($message,'text/html')
     ;
-    foreach($files as $fi) {
-      # TODO support change filename http://swiftmailer.org/docs/messages.html#setting-the-filename
-      $message->attach(\Swift_Attachment::fromPath($fi));
+    foreach($files as $k=>$fi) {
+      $attachment = $message->attach(\Swift_Attachment::fromPath($fi));
+      # change filename http://swiftmailer.org/docs/messages.html#setting-the-filename
+      if(is_string($k)) $attachment->setFilename($k);
     }
 
     # References
