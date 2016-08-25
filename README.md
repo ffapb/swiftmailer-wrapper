@@ -8,7 +8,7 @@ Use:
 ```php
 require_once '/path/to/vendor/.../autoload.php';
 \SwiftmailerWrapper\Utils::mail_attachment(
-  array("newName1"=>"/path/to/file1","newName2"=>"/path/to/file2"),
+  array("/path/to/file1","/path/to/file2"),
   "email@somewhere.com",
   "from@email.com",
   "From Name",
