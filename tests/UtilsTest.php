@@ -36,8 +36,10 @@ class UtilsTest extends \PHPUnit_Framework_TestCase {
       $from,
 
       // subject, body
-      "This is a subject",
-      "This is a message. It <i>supports</i> html.",
+      "swiftmailer-wrapper unit test email",
+      "This is a message. It <i>supports</i> html."
+      ." This is a unit test from <a href='https://github.com/shadiakiki1986/swiftmailer-wrapper'>swiftmailer-wrapper</a> from "
+      .php_uname(),
 
       // config
       $config
