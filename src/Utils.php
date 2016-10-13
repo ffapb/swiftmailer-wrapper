@@ -3,7 +3,7 @@
 namespace SwiftmailerWrapper;
 
 class Utils {
-  public static function mail_attachment($files, $mailto, $from_mail, $from_name, $replyto, $subject, $message, $config) {
+  public static function mail_attachment($files, $mailto, $from_mail, $from_name, $replyto, $subject, $body, $config) {
     if(!class_exists("\Swift_Message")) throw new Exception("Email support not installed on server. Aborting");
 
     // required entries
@@ -22,7 +22,7 @@ class Utils {
         ->setFrom(array($from_mail=>$from_name))
         ->setReplyTo($replyto)
         ->setTo($mailto)
-        ->setBody($message,'text/html')
+        ->setBody($body,'text/html')
     ;
     foreach($files as $k=>$fi) {
       $attachment = \Swift_Attachment::fromPath($fi);
@@ -44,6 +44,14 @@ class Utils {
     if(!!$config['security']) $transport->setEncryption($config['security']);
 
     $mailer = \Swift_Mailer::newInstance($transport);
-    return $mailer->send($message);
+
+    try {
+      $out = $mailer->send($message);
+      return $out;
+    } catch(\Swift_TransportException $err) {
+      if(array_key_exists("backup",$config)) {
+        return self::mail_attachment($files, $mailto, $from_mail, $from_name, $replyto, $subject, $body, $config["backup"]);
+      }
+    }
   }
 } // end class

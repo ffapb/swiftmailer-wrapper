@@ -40,3 +40,12 @@ Files can be renamed in attachment by passing files parameter as follows:
 ```
 
 To use [encrypted smtp](http://swiftmailer.org/docs/sending.html#encrypted-smtp), add `security` key to the config array. Valid values are: `false, ssl, tls`
+
+To add a backup SMTP server and credentials, add a `backup` key similar to the original config array, i.e. with `host, port, username, password, security`.
+
+# Testing
+```bash
+ SWIFTMAILER_WRAPPER_PWD1=password1 \
+  SWIFTMAILER_WRAPPER_PWD2=password2 \
+  composer test
+```

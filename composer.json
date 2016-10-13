@@ -17,16 +17,19 @@
         "swiftmailer/swiftmailer": "*"
     },
     "require-dev": {
-        "jakub-onderka/php-parallel-lint": "^0.9"
+        "php":">=7",
+        "jakub-onderka/php-parallel-lint": "^0.9",
+        "phpunit/phpunit": "^5.6"
     },
     "autoload": {
         "psr-4" : {
-           "SwiftmailerWrapper\\" : "src/SwiftmailerWrapper"
+           "SwiftmailerWrapper\\" : "src"
          }
     },
     "scripts": {
         "test": [
-            "parallel-lint . --exclude vendor"
+            "parallel-lint . --exclude vendor",
+            "phpunit --verbose"
         ]
     }
 }
