@@ -17,15 +17,15 @@ class UtilsTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
-   * @dataProvider testProvider
+   * @dataProvider testMainProvider
    */
-  public function test($config,$from) {
+  public function testMain($config,$from) {
     // set pwd
     $config["password"] = $this->pwd[$config["username"]];
     if(array_key_exists("backup",$config)) $config["backup"]["password"]=$this->pwd[$config["backup"]["username"]];
 
     // send email
-    $out = \SwiftmailerWrapper\Utils::mail_attachment(
+    $out = Utils::mail_attachment(
       // attachments
       array("Attachment.txt"=>__DIR__."/attach.txt"),
 
@@ -47,7 +47,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase {
     $this->assertNotNull($out);
   }
 
-  public function testProvider() { 
+  public function testMainProvider() {
     $c1 = [
       "host"=>"smtp.gmail.com",
       "port"=>"465",
@@ -70,6 +70,45 @@ class UtilsTest extends \PHPUnit_Framework_TestCase {
     $c2["host"]="wrong.smtp.server";
 
     return [[$c1,ME1],[$c2,ME2]];
+  }
+
+  public function testHtmlInBody() {
+    $this->assertTrue(Utils::mail_attachment(array(),
+      "s.akiki@ffaprivatebank.com",
+      "s.akiki@ffaprivatebank.com",
+      "Shadi Akiki",
+      "s.akiki@ffaprivatebank.com",
+      "Some subject",
+      "This is <b>bold</b>."
+    ));
+  }
+
+  public function testMailAttachmentAttachment() {
+    $fn=sprintf("%s.txt",tempnam(sys_get_temp_dir(), 'Tux'));
+    file_put_contents($fn,"some text");
+
+    $this->assertTrue(Utils::mail_attachment(array($fn),
+      "s.akiki@ffaprivatebank.com",
+      "s.akiki@ffaprivatebank.com",
+      "Shadi Akiki",
+      "s.akiki@ffaprivatebank.com",
+      "Some subject",
+      "Attached file with random name."
+    ));
+  }
+
+  public function testMailAttachmentRenameAttachment() {
+    $fn=sprintf("%s.txt",tempnam(sys_get_temp_dir(), 'Tux'));
+    file_put_contents($fn,"some text");
+
+    $this->assertTrue(Utils::mail_attachment(array("newname.txt"=>$fn),
+      "s.akiki@ffaprivatebank.com",
+      "s.akiki@ffaprivatebank.com",
+      "Shadi Akiki",
+      "s.akiki@ffaprivatebank.com",
+      "Some subject",
+      "Attached file named 'newname.txt'."
+    ));
   }
 
 }
