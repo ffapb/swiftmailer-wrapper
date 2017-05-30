@@ -8,7 +8,7 @@ class Utils {
 
     // required entries
     $missingConfigKeys = array_diff(array("host","port","username","password"),array_keys($config));
-    if(count($missingConfigKeys)>0) throw new Exception("Missing config keys: ".implode(", ",$missingConfigKeys));
+    if(count($missingConfigKeys)>0) throw new \Exception("Missing config keys: ".implode(", ",$missingConfigKeys));
 
     // optional entries
     if(!array_key_exists('security',$config)) {
@@ -17,7 +17,7 @@ class Utils {
       if(!in_array($config['security'],array('ssl','tls'))) throw new \Exception("Invalid security option: ".$config['security']);
     }
 
-    $message = \Swift_Message::newInstance()
+    $message = (new \Swift_Message())
         ->setSubject($subject)
         ->setFrom(array($from_mail=>$from_name))
         ->setReplyTo($replyto)
@@ -35,7 +35,7 @@ class Utils {
     # https://www.sitepoint.com/sending-email-with-swift-mailer/
     # http://swiftmailer.org/docs/sending.html
     # http://stackoverflow.com/a/26256177/4126114
-    $transport = \Swift_SmtpTransport::newInstance($config["host"],$config["port"])
+    $transport = (new \Swift_SmtpTransport($config["host"],$config["port"]))
         ->setUsername($config["username"])
         ->setPassword($config["password"]);
 
@@ -43,15 +43,16 @@ class Utils {
     // https://github.com/swiftmailer/swiftmailer/blob/fffbc0e2a7e376dbb0a4b5f2ff6847330f20ccf9/lib/classes/Swift/SmtpTransport.php#L42
     if(!!$config['security']) $transport->setEncryption($config['security']);
 
-    $mailer = \Swift_Mailer::newInstance($transport);
+    $mailer = new \Swift_Mailer($transport);
 
     try {
       $out = $mailer->send($message);
       return $out;
     } catch(\Swift_TransportException $err) {
-      if(array_key_exists("backup",$config)) {
-        return self::mail_attachment($files, $mailto, $from_mail, $from_name, $replyto, $subject, $body, $config["backup"]);
+      if(!array_key_exists("backup",$config)) {
+        throw $err;
       }
+      return self::mail_attachment($files, $mailto, $from_mail, $from_name, $replyto, $subject, $body, $config["backup"]);
     }
   }
 } // end class

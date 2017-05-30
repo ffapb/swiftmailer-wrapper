@@ -2,8 +2,17 @@
 
 namespace SwiftmailerWrapper;
 
-if(!defined('ME1')) define('ME1', "shadiakiki1986@gmail.com");
-if(!defined('ME2')) define('ME2', "ffaprivatebank@gmail.com");
+if(!defined('ME1')) {
+  $ME1 = getenv("SWIFTMAILER_WRAPPER_EML1");
+  if(!$ME1) $this->markTestSkipped("Missing environment variable SWIFTMAILER_WRAPPER_EML1");
+  define('ME1', $ME1);
+}
+
+if(!defined('ME2')) {
+  $ME2 = getenv("SWIFTMAILER_WRAPPER_EML2");
+  if(!$ME2) $this->markTestSkipped("Missing environment variable SWIFTMAILER_WRAPPER_EML2");
+  define('ME2', $ME2);
+}
 
 class UtilsTest extends \PHPUnit_Framework_TestCase {
   public function setUp() {
@@ -14,6 +23,9 @@ class UtilsTest extends \PHPUnit_Framework_TestCase {
     $msg = "Please set env var SWIFTMAILER_WRAPPER_PWD";
     if(!$this->pwd[ME1]) $this->markTestSkipped($msg."1");
     if(!$this->pwd[ME2]) $this->markTestSkipped($msg."2");
+
+    $this->config = $this->testMainProvider()[0][0];
+    $this->config["password"]=$this->pwd[ME1];
   }
 
   /**
@@ -73,42 +85,48 @@ class UtilsTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testHtmlInBody() {
-    $this->assertTrue(Utils::mail_attachment(array(),
+    $out = Utils::mail_attachment(array(),
       "s.akiki@ffaprivatebank.com",
       "s.akiki@ffaprivatebank.com",
       "Shadi Akiki",
       "s.akiki@ffaprivatebank.com",
       "Some subject",
-      "This is <b>bold</b>."
-    ));
+      "This is <b>bold</b>.",
+      $this->config
+    );
+    $this->assertEquals(1,$out);
   }
 
   public function testMailAttachmentAttachment() {
     $fn=sprintf("%s.txt",tempnam(sys_get_temp_dir(), 'Tux'));
     file_put_contents($fn,"some text");
 
-    $this->assertTrue(Utils::mail_attachment(array($fn),
+    $out = Utils::mail_attachment(array($fn),
       "s.akiki@ffaprivatebank.com",
       "s.akiki@ffaprivatebank.com",
       "Shadi Akiki",
       "s.akiki@ffaprivatebank.com",
       "Some subject",
-      "Attached file with random name."
-    ));
+      "Attached file with random name.",
+      $this->config
+    );
+    $this->assertEquals(1,$out);
   }
 
   public function testMailAttachmentRenameAttachment() {
     $fn=sprintf("%s.txt",tempnam(sys_get_temp_dir(), 'Tux'));
     file_put_contents($fn,"some text");
 
-    $this->assertTrue(Utils::mail_attachment(array("newname.txt"=>$fn),
+    $out = Utils::mail_attachment(array("newname.txt"=>$fn),
       "s.akiki@ffaprivatebank.com",
       "s.akiki@ffaprivatebank.com",
       "Shadi Akiki",
       "s.akiki@ffaprivatebank.com",
       "Some subject",
-      "Attached file named 'newname.txt'."
-    ));
+      "Attached file named 'newname.txt'.",
+      $this->config
+    );
+    $this->assertEquals(1,$out);
   }
 
 }

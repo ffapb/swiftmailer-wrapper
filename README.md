@@ -45,7 +45,12 @@ To add a backup SMTP server and credentials, add a `backup` key similar to the o
 
 # Testing
 ```bash
- SWIFTMAILER_WRAPPER_PWD1=password1 \
+composer install
+SWIFTMAILER_WRAPPER_EML1=my@gmail.com \
+  SWIFTMAILER_WRAPPER_PWD1=password1 \
+  SWIFTMAILER_WRAPPER_EML2=another@gmail.com \
   SWIFTMAILER_WRAPPER_PWD2=password2 \
   composer test
 ```
+
+Note that emails above should be gmail accounts because the tests define the gmail server explicitly
