@@ -52,6 +52,8 @@ class Utils {
       if(!array_key_exists("backup",$config)) {
         throw $err;
       }
+      print("Got exception using primary email. Trying with backup email.".PHP_EOL);
+      print($err);
       return self::mail_attachment($files, $mailto, $from_mail, $from_name, $replyto, $subject, $body, $config["backup"]);
     }
   }
